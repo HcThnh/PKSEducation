@@ -1,0 +1,14 @@
+# Ignore non-code folders/files as requested (only frontend and backend in repo)
+/docs/
+
+# Logs & Environment
+*.log
+.env
+.env.local
+
+# Dependencies & Build artifacts
+node_modules/
+dist/
+dist-ssr/
+build/
+.DS_Store
