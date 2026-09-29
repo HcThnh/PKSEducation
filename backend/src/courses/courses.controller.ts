@@ -26,21 +26,21 @@ export class CoursesController {
 
     @Post()
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.ADMIN, Role.STAFF)
+    @Roles(Role.ADMIN)
     async create(@Body() createCourseDto: CreateCourseDto) {
         return this.coursesService.create(createCourseDto);
     }
 
     @Patch(":id")
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.ADMIN, Role.STAFF)
+    @Roles(Role.ADMIN)
     async update(@Param("id") id: string, @Body() updateCourseDto: UpdateCourseDto) {
         return this.coursesService.update(id, updateCourseDto);
     }
 
     @Delete(":id")
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.ADMIN, Role.STAFF)
+    @Roles(Role.ADMIN)
     async remove(@Param("id") id: string) {
         return this.coursesService.remove(id);
     }

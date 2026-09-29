@@ -16,7 +16,7 @@ erDiagram
         string  full_name
         string  email         UK "unique"
         string  password_hash    "bcrypt, saltRounds >= 10"
-        Role    role             "STUDENT | ADMIN | STAFF, default STUDENT"
+        Role    role             "STUDENT | ADMIN, default STUDENT"
         datetime created_at      "default now()"
         datetime updated_at      "auto-updated"
     }
@@ -60,7 +60,7 @@ erDiagram
 | `full_name` | `VARCHAR` | `NOT NULL` | Họ và tên người dùng |
 | `email` | `VARCHAR` | `NOT NULL`, `UNIQUE` | Email dùng để đăng nhập |
 | `password_hash` | `VARCHAR` | `NOT NULL` | Mật khẩu đã mã hóa bcrypt (salt >= 10) |
-| `role` | `ENUM` | `NOT NULL`, `DEFAULT 'STUDENT'` | `STUDENT` / `ADMIN` / `STAFF` |
+| `role` | `ENUM` | `NOT NULL`, `DEFAULT 'STUDENT'` | `STUDENT` / `ADMIN` |
 | `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT NOW()` | Thời điểm tạo tài khoản |
 | `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, auto-update | Thời điểm cập nhật gần nhất |
 
@@ -123,7 +123,6 @@ courses (1) ────────── (N) enrollments
 |---|---|
 | `STUDENT` | Học viên — Ghi danh, xem khóa học của mình |
 | `ADMIN` | Quản trị viên — Toàn quyền CRUD + xem danh sách ghi danh |
-| `STAFF` | Nhân viên — Tương tự Admin, quản lý khóa học |
 
 ### `EnrollmentStatus`
 | Giá trị | Mô tả |

@@ -29,7 +29,7 @@ export class EnrollmentsController {
 
     @Get("course/:courseId")
     @UseGuards(RolesGuard)
-    @Roles(Role.ADMIN, Role.STAFF)
+    @Roles(Role.ADMIN)
     async getCourseEnrollments(@Param("courseId") courseId: string) {
         return this.enrollmentsService.getCourseEnrollments(courseId);
     }

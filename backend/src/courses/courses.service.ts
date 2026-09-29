@@ -14,7 +14,7 @@ export class CoursesService {
 
         const where: any = {};
 
-        if (userRole !== Role.ADMIN && userRole !== Role.STAFF) {
+        if (userRole !== Role.ADMIN) {
             where.isHidden = false;
         }
 
