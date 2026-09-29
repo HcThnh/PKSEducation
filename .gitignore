@@ -1,5 +1,5 @@
 # Ignore non-code folders/files as requested (only frontend and backend in repo)
-/docs/
+# /docs/ — now tracked (required deliverable: ERD, Postman Collection, Test Screenshots)
 
 # Logs & Environment
 *.log
