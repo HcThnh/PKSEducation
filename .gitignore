@@ -6,6 +6,12 @@
 .env
 .env.local
 
+# IDE & AI Agent folders
+.agents/
+.claude/
+.cursor/
+.devin/
+
 # Dependencies & Build artifacts
 node_modules/
 dist/
