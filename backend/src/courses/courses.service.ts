@@ -19,10 +19,18 @@ export class CoursesService {
         }
 
         if (search) {
+            where.OR = [
+                { title: { contains: search, mode: "insensitive" } },
+                { shortDescription: { contains: search, mode: "insensitive" } },
+                { instructor: { contains: search, mode: "insensitive" } },
+            ];
+        }
+
+        if (category) {
             where.category = {
                 equals: category,
                 mode: "insensitive",
-            }
+            };
         }
 
         const courses = await this.prisma.course.findMany({

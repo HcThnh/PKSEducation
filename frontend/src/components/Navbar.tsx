@@ -59,7 +59,7 @@ export const Navbar: React.FC = () => {
             {isAuthenticated ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                 <span className="user-badge">
-                  {user?.fullName} ({user?.role})
+                  {user?.fullName}
                 </span>
                 <button onClick={handleLogout} className="btn btn-outline btn-sm">
                   Đăng xuất
