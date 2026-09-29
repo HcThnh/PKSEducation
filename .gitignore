@@ -1,5 +1,9 @@
 # Ignore non-code folders/files as requested (only frontend and backend in repo)
-# /docs/ — now tracked (required deliverable: ERD, Postman Collection, Test Screenshots)
+# /docs/ — partially tracked: only ERD.md, TEST_SCREENSHOTS.md, screenshots/ are kept
+docs/BACKEND_ROADMAP.md
+docs/FRONTEND_ROADMAP.md
+docs/PKS_Portal.postman_collection.json
+docs/REQUIREMENTS_ANALYSIS.md
 
 # Logs & Environment
 *.log
