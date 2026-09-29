@@ -1,0 +1,65 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+enum Role {
+    STUDENT
+    ADMIN
+    STAFF
+}
+
+enum EnrollmentStatus {
+    CONFIRMED
+    CANCELLED
+}
+
+model User {
+    id           String       @id @default(uuid())
+    fullName     String       @map("full_name")
+    email        String       @unique
+    passwordHash String       @map("password_hash")
+    role         Role         @default(STUDENT)
+    createdAt    DateTime     @default(now()) @map("created_at")
+    updatedAt    DateTime     @updatedAt @map("updated_at")
+    enrollments  Enrollment[]
+
+    @@map("users")
+}
+
+model Course {
+    id               String       @id @default(uuid())
+    title            String
+    category         String
+    instructor       String
+    shortDescription String       @map("short_description")
+    fullDescription  String?      @map("full_description")
+    fee              Float        @default(0)
+    maxCapacity      Int          @map("max_capacity")
+    enrolledCount    Int          @default(0) @map("enrolled_count")
+    isHidden         Boolean      @default(false) @map("is_hidden")
+    createdAt        DateTime     @default(now()) @map("created_at")
+    updatedAt        DateTime     @updatedAt @map("updated_at")
+    enrollments      Enrollment[]
+
+    @@map("courses")
+}
+
+model Enrollment {
+    id         String           @id @default(uuid())
+    userId     String           @map("user_id")
+    courseId   String           @map("course_id")
+    enrolledAt DateTime         @default(now()) @map("enrolled_at")
+    status     EnrollmentStatus @default(CONFIRMED)
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, courseId], name: "user_course_unique")
+    @@map("enrollments")
+}
+
