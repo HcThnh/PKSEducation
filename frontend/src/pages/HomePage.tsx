@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { courseApi } from '../api/courseApi';
 import type { Course } from '../types/course';
 import { CourseCard } from '../components/CourseCard';
 
 export const HomePage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlCategory = searchParams.get('category') || '';
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
-  const [category, setCategory] = useState<string>('');
+  const [category, setCategory] = useState<string>(urlCategory);
   const [categories, setCategories] = useState<string[]>([]);
+
+  // Keep state synced with URL search params
+  useEffect(() => {
+    const catParam = searchParams.get('category') || '';
+    setCategory(catParam);
+  }, [searchParams]);
 
   const fetchCourses = async () => {
     try {
@@ -39,6 +49,16 @@ export const HomePage: React.FC = () => {
     return () => clearTimeout(handler);
   }, [search, category]);
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = e.target.value;
+    setCategory(selected);
+    if (selected) {
+      setSearchParams({ category: selected });
+    } else {
+      setSearchParams({});
+    }
+  };
+
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
@@ -64,7 +84,7 @@ export const HomePage: React.FC = () => {
           <select
             className="form-control"
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={handleCategoryChange}
           >
             <option value="">Tất cả danh mục</option>
             {categories.map((cat) => (

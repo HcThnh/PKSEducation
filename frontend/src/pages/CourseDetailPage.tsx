@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { courseApi } from '../api/courseApi';
 import type { Course } from '../types/course';
 import { useAuth } from '../context/AuthContext';
+import { CourseCard } from '../components/CourseCard';
 
 export const CourseDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,7 +12,9 @@ export const CourseDetailPage: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
   const [course, setCourse] = useState<Course | null>(null);
+  const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingRelated, setLoadingRelated] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,6 +26,11 @@ export const CourseDetailPage: React.FC = () => {
         setError(null);
         const data = await courseApi.getCourseById(id);
         setCourse(data);
+
+        // Fetch related courses in the same category
+        if (data.category) {
+          fetchRelatedCourses(data.category, data.id);
+        }
       } catch (err: any) {
         console.error('Lỗi khi lấy chi tiết khóa học:', err);
         setError('Không thể tải thông tin khóa học hoặc khóa học không tồn tại.');
@@ -33,6 +41,20 @@ export const CourseDetailPage: React.FC = () => {
 
     fetchCourseDetail();
   }, [id]);
+
+  const fetchRelatedCourses = async (categoryName: string, currentCourseId: string) => {
+    try {
+      setLoadingRelated(true);
+      const list = await courseApi.getCourses({ category: categoryName });
+      // Exclude current course from related list
+      const filtered = list.filter((item) => item.id !== currentCourseId);
+      setRelatedCourses(filtered);
+    } catch (err) {
+      console.error('Lỗi tải khóa học liên quan:', err);
+    } finally {
+      setLoadingRelated(false);
+    }
+  };
 
   const handleEnroll = async () => {
     if (!isAuthenticated) {
@@ -94,7 +116,7 @@ export const CourseDetailPage: React.FC = () => {
   const isFull = course.isFull === true || course.enrolledCount >= course.maxCapacity;
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '960px', margin: '0 auto' }}>
       <Link to="/" style={{ display: 'inline-block', marginBottom: '16px', fontSize: '14px', color: 'var(--text-muted)' }}>
         &larr; Quay lại danh sách khóa học
       </Link>
@@ -102,7 +124,16 @@ export const CourseDetailPage: React.FC = () => {
       <div className="course-detail-container">
         <div className="detail-header">
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '12px' }}>
-            <span className="badge badge-category">{course.category}</span>
+            {/* Clickable category badge to filter courses by category */}
+            <Link
+              to={`/?category=${encodeURIComponent(course.category)}`}
+              className="badge badge-category"
+              title={`Xem tất cả khóa học thuộc danh mục ${course.category}`}
+              style={{ cursor: 'pointer', textDecoration: 'none' }}
+            >
+              🏷️ {course.category}
+            </Link>
+
             {isFull ? (
               <span className="badge badge-full">Hết chỗ</span>
             ) : (
@@ -175,6 +206,42 @@ export const CourseDetailPage: React.FC = () => {
             )}
           </button>
         </div>
+      </div>
+
+      {/* Section: Courses in the same category */}
+      <div style={{ marginTop: '40px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)' }}>
+            Khóa học cùng danh mục ({course.category})
+          </h3>
+
+          <Link
+            to={`/?category=${encodeURIComponent(course.category)}`}
+            style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary)' }}
+          >
+            Xem tất cả &rarr;
+          </Link>
+        </div>
+
+        {loadingRelated ? (
+          <div className="course-grid">
+            {[1, 2].map((i) => (
+              <div key={i} className="skeleton skeleton-card" />
+            ))}
+          </div>
+        ) : relatedCourses.length === 0 ? (
+          <div className="empty-state" style={{ padding: '24px' }}>
+            <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
+              Hiện chưa có khóa học khác cùng danh mục này.
+            </p>
+          </div>
+        ) : (
+          <div className="course-grid">
+            {relatedCourses.map((item) => (
+              <CourseCard key={item.id} course={item} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
