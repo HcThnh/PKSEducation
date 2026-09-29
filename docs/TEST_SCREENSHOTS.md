@@ -9,7 +9,6 @@ Tài liệu này tổng hợp các hình ảnh kiểm thử chức năng của d
 **URL:** `http://localhost:5173/`  
 **Mô tả:** Hiển thị danh sách khóa học dạng card grid, bộ lọc tìm kiếm và lọc danh mục.
 
-![Homepage — Danh sách khóa học](./screenshots/01_homepage.png)
 
 **Kiểm tra:**
 - ✅ Hiển thị card khóa học với đầy đủ thông tin: tên, danh mục, giảng viên, học phí, sĩ số
@@ -25,8 +24,6 @@ Tài liệu này tổng hợp các hình ảnh kiểm thử chức năng của d
 **URL Login:** `http://localhost:5173/login`  
 **URL Register:** `http://localhost:5173/register`
 
-![Login & Register Pages](./screenshots/02_login_register.png)
-
 **Kiểm tra:**
 - ✅ Form đăng nhập với validation email/password
 - ✅ Form đăng ký với các trường: Họ tên, Email, Mật khẩu
@@ -39,8 +36,6 @@ Tài liệu này tổng hợp các hình ảnh kiểm thử chức năng của d
 ## 3. Kiểm thử API với Postman
 
 **File collection:** [`PKS_Portal.postman_collection.json`](./PKS_Portal.postman_collection.json)
-
-![Postman API Testing — Enrollment](./screenshots/03_postman_api.png)
 
 **Kiểm tra:**
 - ✅ `POST /auth/login` trả về JWT `accessToken` — Status `200 OK`
@@ -55,8 +50,6 @@ Tài liệu này tổng hợp các hình ảnh kiểm thử chức năng của d
 
 **File test:** `backend/src/enrollments/enrollments.service.spec.ts`  
 **Lệnh chạy:** `npm run test -- --testPathPatterns=enrollments.service.spec --verbose`
-
-![Unit Test Results — Jest](./screenshots/04_unit_tests.png)
 
 **Kết quả:**
 

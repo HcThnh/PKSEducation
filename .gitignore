@@ -18,3 +18,5 @@ dist/
 dist-ssr/
 build/
 .DS_Store
+
+.screenshots/
